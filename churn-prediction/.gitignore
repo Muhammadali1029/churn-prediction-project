@@ -1,32 +1,25 @@
-# Python
-__pycache__/
-*.py[cod]
-*.ipynb_checkpoints
-
-# Conda
-.env/
-*.conda
-*.env
-*.yaml
-
-# Jupyter Notebook
-.ipynb_checkpoints/
-
-# VS Code
-.vscode/
-
-# Data
-data/
+# Data - never commit raw data to git
+data/raw/
+data/processed/
 *.csv
-*.h5
-*.log
-
-# Models
-models/
-*.pt
 *.pkl
 *.joblib
 
-# Logs
-wandb/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+venv/
+env/
+
+# MLflow
 mlruns/
+mlflow.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
