@@ -21,9 +21,9 @@ from datetime import datetime
 from .config import RANDOM_SEED, MODEL_PATH, PROCESSED_DATA_PATH
 from .feature_engineering import ChurnFeatureEngineer
 from .model_utils import encode_categorical_features, get_feature_importance
+from .logger_config import setup_logger, MLExperimentLogger
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 class ChurnModelTrainer:
     """Handles model training with MLflow tracking"""
@@ -32,6 +32,7 @@ class ChurnModelTrainer:
         self.experiment_name = experiment_name
         mlflow.set_experiment(experiment_name)
         self.feature_engineer = ChurnFeatureEngineer()
+        self.ml_logger = MLExperimentLogger(experiment_name) 
         
     def prepare_data(self, df):
         """Prepare data for training"""
