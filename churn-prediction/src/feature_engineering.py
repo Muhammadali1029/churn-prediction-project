@@ -56,7 +56,7 @@ class ChurnFeatureEngineer:
         df['tenure_bucket'] = pd.cut(df['tenure'], 
                                      bins=[-1, 6, 12, 24, 48, 72], 
                                      labels=['0-6m', '6-12m', '1-2y', '2-4y', '4y+'])
-        df['is_new_customer'] = (df['tenure'] <= 12).astype(int)
+        df['is_new_customer'] = (df['tenure'] <= 12).astype(float)
         df['tenure_squared'] = df['tenure'] ** 2  # Capture non-linear effects
         
         # 2. Revenue features
@@ -73,7 +73,7 @@ class ChurnFeatureEngineer:
         df['has_premium_unprotected'] = (
             (df['InternetService'] == 'Fiber optic') & 
             (df['num_protection_services'] == 0)
-        ).astype(int)
+        ).astype(float)
         
         # 4. Contract value features
         df['contract_value_score'] = df['Contract'].map({
@@ -83,11 +83,11 @@ class ChurnFeatureEngineer:
         })
         
         # 5. Payment risk features
-        df['is_electronic_payment'] = (df['PaymentMethod'] == 'Electronic check').astype(int)
+        df['is_electronic_payment'] = (df['PaymentMethod'] == 'Electronic check').astype(float)
         
         # 6. Additional features based on business logic
         df['revenue_per_service'] = df['MonthlyCharges'] / (df['num_protection_services'] + 1)
-        df['high_value_customer'] = (df['MonthlyCharges'] > df['MonthlyCharges'].quantile(0.75)).astype(int)
+        df['high_value_customer'] = (df['MonthlyCharges'] > df['MonthlyCharges'].quantile(0.75)).astype(float)
         
         
         logger.info(f"Created {len([col for col in df.columns if col not in ['customerID']])} features")
