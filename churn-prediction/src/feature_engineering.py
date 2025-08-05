@@ -3,7 +3,7 @@ Feature engineering for churn prediction.
 Following insights from EDA.
 """
 import pandas as pd
-from logger_config import setup_logger
+from .logger_config import setup_logger
 
 logger = setup_logger(__name__)
 
