@@ -3,10 +3,9 @@ Feature engineering for churn prediction.
 Following insights from EDA.
 """
 import pandas as pd
-import logging
+from logger_config import setup_logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
 
 class ChurnFeatureEngineer:
     """
