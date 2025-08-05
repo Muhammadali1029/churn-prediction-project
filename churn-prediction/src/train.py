@@ -75,6 +75,10 @@ class ChurnModelTrainer:
             X_train_scaled = scaler.fit_transform(X_train)
             X_val_scaled = scaler.transform(X_val)
             
+            # Re-wrap in a DataFrame to preserve feature names
+            X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
+            X_val_scaled = pd.DataFrame(X_val_scaled, columns=X_val.columns)
+
             # Train model
             model = LogisticRegression(random_state=RANDOM_SEED, max_iter=1000)
             model.fit(X_train_scaled, y_train)
@@ -91,7 +95,7 @@ class ChurnModelTrainer:
             mlflow.log_metric("val_accuracy", (y_pred == y_val).mean())
             
             # Log model
-            mlflow.sklearn.log_model(model, "model")
+            mlflow.sklearn.log_model(model, "model", input_example=pd.DataFrame(X_train_scaled, columns=X_train.columns).head(1))
             
             logger.info(f"Baseline AUC: {auc:.4f}")
             
@@ -146,7 +150,7 @@ class ChurnModelTrainer:
             mlflow.log_dict(importance_dict, "feature_importance.json")
             
             # Log model
-            mlflow.xgboost.log_model(model, "model")
+            mlflow.xgboost.log_model(model, "model", input_example=X_train.head(1))
             
             logger.info(f"XGBoost AUC: {auc:.4f}")
             
