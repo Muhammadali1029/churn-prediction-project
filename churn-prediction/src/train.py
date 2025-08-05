@@ -18,9 +18,9 @@ import xgboost as xgb
 import json
 from datetime import datetime
 
-from config import RANDOM_SEED, MODEL_PATH, PROCESSED_DATA_PATH
-from feature_engineering import ChurnFeatureEngineer
-from model_utils import encode_categorical_features, get_feature_importance
+from .config import RANDOM_SEED, MODEL_PATH, PROCESSED_DATA_PATH
+from .feature_engineering import ChurnFeatureEngineer
+from .model_utils import encode_categorical_features, get_feature_importance
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
