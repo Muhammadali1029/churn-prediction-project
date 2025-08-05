@@ -112,7 +112,8 @@ class ChurnModelTrainer:
                     'subsample': 0.8,
                     'colsample_bytree': 0.8,
                     'random_state': RANDOM_SEED,
-                    'eval_metric': 'auc'
+                    'eval_metric': 'auc',
+                    'early_stopping_rounds': 10
                 }
             
             # Log parameters
@@ -125,7 +126,6 @@ class ChurnModelTrainer:
             model.fit(
                 X_train, y_train,
                 eval_set=[(X_val, y_val)],
-                early_stopping_rounds=10,
                 verbose=False
             )
             
