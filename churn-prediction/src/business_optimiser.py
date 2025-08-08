@@ -43,7 +43,14 @@ class ChurnBusinessOptimiser:
         # - True Negative: Correctly identify loyal customer
         #   Value = 0 (no action needed)
         
-        value_tp = tp * (self.retention_success_rate * self.monthly_revenue * 12 - self.retention_cost)
+        value_per_tp = tp * (self.retention_success_rate * self.monthly_revenue * 12) - self.retention_cost
+
+         # If retention isn't profitable, we shouldn't target anyone
+        if value_per_tp < 0:
+            logger.warning(f"Retention not profitable! Value per TP: ${value_per_tp:.2f}")
+    
+
+        value_tp = tp * value_per_tp
         cost_fp = fp * self.retention_cost
         cost_fn = fn * self.monthly_revenue * 12
         
@@ -62,14 +69,18 @@ class ChurnBusinessOptimiser:
             'recall': tp / (tp + fn) if (tp + fn) > 0 else 0,
             'total_business_value': total_value,
             'value_per_customer': value_per_customer,
-            'customers_to_target': tp + fp
+            'customers_to_target': tp + fp,
+            'value_per_tp': value_per_tp,
+            'annual_revenue': self.monthly_revenue * 12,
+            'retention_value': self.retention_success_rate * self.monthly_revenue * 12
         }
         
         return metrics
     
     def find_optimal_threshold(self, y_true, y_pred_proba):
-        """Find the threshold that maximises business value"""
-        thresholds = np.arange(0.1, 0.9, 0.01)
+        """Find the threshold that maximizes business value"""
+        # Use finer granularity for threshold search
+        thresholds = np.arange(0.05, 0.95, 0.005)
         results = []
         
         for threshold in thresholds:
@@ -77,14 +88,26 @@ class ChurnBusinessOptimiser:
             results.append(metrics)
         
         df_results = pd.DataFrame(results)
+        
+        # Debug: print value at different thresholds
+        sample_thresholds = [0.1, 0.3, 0.5, 0.7]
+        print("\nBusiness value at different thresholds:")
+        for t in sample_thresholds:
+            idx = df_results[df_results['threshold'].round(2) == t].index[0]
+            print(f"Threshold {t}: Value=${df_results.loc[idx, 'total_business_value']:,.2f}, "
+                f"Target={df_results.loc[idx, 'customers_to_target']}, "
+                f"TP={df_results.loc[idx, 'true_positives']}")
+        
         optimal_idx = df_results['total_business_value'].idxmax()
         optimal_threshold = df_results.loc[optimal_idx, 'threshold']
         
         logger.info(f"Optimal threshold: {optimal_threshold:.3f}", extra={
             'max_value': df_results.loc[optimal_idx, 'total_business_value'],
-            'customers_to_target': df_results.loc[optimal_idx, 'customers_to_target']
+            'customers_to_target': df_results.loc[optimal_idx, 'customers_to_target'],
+            'precision': df_results.loc[optimal_idx, 'precision'],
+            'recall': df_results.loc[optimal_idx, 'recall']
         })
-        
+    
         return optimal_threshold, df_results
     
     def plot_threshold_analysis(self, df_results):
