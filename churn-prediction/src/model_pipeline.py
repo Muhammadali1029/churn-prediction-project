@@ -15,10 +15,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, classification_report
 
-from config import MODEL_PATH, RANDOM_SEED
-from feature_engineering import ChurnFeatureEngineer
-from model_utils import encode_categorical_features
-from logger_config import setup_logger
+from .config import MODEL_PATH, RANDOM_SEED
+from .feature_engineering import ChurnFeatureEngineer
+from .model_utils import encode_categorical_features
+from .logger_config import setup_logger
 
 logger = setup_logger(__name__)
 
