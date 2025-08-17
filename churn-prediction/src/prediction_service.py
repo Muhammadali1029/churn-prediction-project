@@ -8,9 +8,9 @@ from typing import Dict, List, Optional
 from datetime import datetime
 import logging
 
-from model_pipeline import ChurnModelPipeline
-from business_optimiser import ChurnBusinessOptimiser
-from logger_config import setup_logger
+from .model_pipeline import ChurnModelPipeline
+from .business_optimiser import ChurnBusinessOptimiser
+from .logger_config import setup_logger
 
 logger = setup_logger(__name__)
 

@@ -9,8 +9,8 @@ import logging
 from functools import wraps
 import time
 
-from prediction_service import ChurnPredictionService
-from logger_config import setup_logger
+from .prediction_service import ChurnPredictionService
+from .logger_config import setup_logger
 
 # Initialize Flask app
 app = Flask(__name__)
