@@ -33,24 +33,28 @@ class ChurnPredictionService:
         # Convert to DataFrame
         df = pd.DataFrame([customer_data])
         
-        # Get prediction
-        probability = self.pipeline.predict_proba(df)[0]
-        will_churn = probability >= self.business_threshold
-        
-        # Business recommendation
-        if will_churn:
-            retention_value = self._calculate_retention_value(customer_data)
-            recommendation = "High priority for retention" if retention_value > 100 else "Monitor closely"
-        else:
-            recommendation = "Low churn risk"
-        
-        return {
-            'customer_id': customer_data.get('customerID'),
-            'churn_probability': float(probability),
-            'will_churn': bool(will_churn),
-            'recommendation': recommendation,
-            'predicted_at': datetime.now().isoformat()
-        }
+        try:
+            # Get prediction
+            probability = self.pipeline.predict_proba(df)[0]
+            will_churn = probability >= self.business_threshold
+            
+            # Business recommendation
+            if will_churn:
+                retention_value = self._calculate_retention_value(customer_data)
+                recommendation = "High priority for retention" if retention_value > 100 else "Monitor closely"
+            else:
+                recommendation = "Low churn risk"
+            
+            return {
+                'customer_id': customer_data.get('customerID'),
+                'churn_probability': float(probability),
+                'will_churn': bool(will_churn),
+                'recommendation': recommendation,
+                'predicted_at': datetime.now().isoformat()
+            }
+        except Exception as e:
+            logger.error(f"Error in single prediction: {str(e)}")
+            raise
     
     def predict_batch(self, df: pd.DataFrame) -> pd.DataFrame:
         """Predict for multiple customers"""
