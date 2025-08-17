@@ -5,6 +5,7 @@ data/processed/
 *.pkl
 *.joblib
 logs
+models/
 
 # Python
 __pycache__/
