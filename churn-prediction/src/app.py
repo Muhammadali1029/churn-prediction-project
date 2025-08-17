@@ -150,4 +150,4 @@ def update_threshold():
 
 if __name__ == '__main__':
     # Don't use this in production - use gunicorn instead
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5001)

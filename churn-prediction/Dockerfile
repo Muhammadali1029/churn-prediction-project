@@ -11,7 +11,7 @@ COPY src/ ./src/
 COPY models/ ./models/
 
 # Expose port
-EXPOSE 5000
+EXPOSE 5001
 
 # Run with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--timeout", "120", "src.app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--timeout", "120", "src.app:app"]
