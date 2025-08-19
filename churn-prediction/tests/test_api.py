@@ -25,22 +25,21 @@ class TestAPI:
         assert 'status' in data
         assert data['status'] == 'healthy'
         
-    def test_predict_endpoint_valid(self, client):
+    def test_predict_endpoint_valid(self, client, complete_customer_data):
         """Test prediction with valid data"""
-        customer_data = {
-            "customerID": "TEST-001",
-            "tenure": 12,
-            "MonthlyCharges": 50.0,
-            "Contract": "Month-to-month",
-            # Add all other required fields...
-        }
-        
         response = client.post('/predict',
-                              json=customer_data,
-                              content_type='application/json')
+                            json=complete_customer_data,
+                            content_type='application/json')
         
-        # Should either succeed or fail with specific error about missing fields
-        assert response.status_code in [200, 400]
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        
+        # Verify response structure
+        assert 'customer_id' in data
+        assert 'churn_probability' in data
+        assert 'will_churn' in data
+        assert 'recommendation' in data
+        assert 0 <= data['churn_probability'] <= 1
         
     def test_predict_endpoint_invalid(self, client):
         """Test prediction with invalid data"""
