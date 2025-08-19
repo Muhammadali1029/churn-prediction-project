@@ -55,7 +55,7 @@ with col2:
 with col3:
     # Simulate API health check
     try:
-        response = requests.get("http://localhost:5000/health", timeout=2)
+        response = requests.get("http://localhost:5001/health", timeout=2)
         api_status = "🟢 Online" if response.status_code == 200 else "🔴 Offline"
     except:
         api_status = "🔴 Offline"
