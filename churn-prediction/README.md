@@ -66,8 +66,8 @@ graph TD
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Muhammadali1029/ml-engineering-training.git
-cd ml-engineering-training/churn-prediction
+git clone https://github.com/Muhammadali1029/churn-prediction-project.git
+cd churn-prediction-project/churn-prediction
 ```
 
 2. Create a new conda environment named 'your-env-name'

@@ -18,8 +18,8 @@ Monitoring Infrastructure: A running instance of Prometheus and Grafana.
 Begin by setting up your local environment and preparing the necessary files.
 
 # Clone the repository
-git clone https://github.com/Muhammadali1029/ml-engineering-training.git
-cd ml-engineering-training/churn-prediction
+git clone https://github.com/Muhammadali1029/churn-prediction-project.git
+cd churn-prediction-project/churn-prediction
 
 # Create the production environment file from the example
 cp .env.example .env.production
