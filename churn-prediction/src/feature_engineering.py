@@ -30,17 +30,29 @@ class ChurnFeatureEngineer:
         Clean numeric columns that might have been read as strings.
         This is a common issue in real-world data.
         """
-        # Convert TotalCharges to numeric, replacing errors with NaN
-        df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
-        
-        # Handle missing values appropriately
-        # For TotalCharges, if missing, we can impute based on MonthlyCharges * tenure
-        mask = df['TotalCharges'].isna()
-        if mask.any():
-            logger.warning(f"Found {mask.sum()} rows with invalid TotalCharges. Imputing...")
-            df.loc[mask, 'TotalCharges'] = df.loc[mask, 'MonthlyCharges'] * df.loc[mask, 'tenure']
-            # If tenure is 0, just use 0
-            df.loc[mask & (df['tenure'] == 0), 'TotalCharges'] = 0
+        # Check if TotalCharges exists before trying to convert
+        if 'TotalCharges' in df.columns:
+            # Convert TotalCharges to numeric, replacing errors with NaN
+            df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
+            
+            # Industry practice: Handle missing values appropriately
+            mask = df['TotalCharges'].isna()
+            if mask.any():
+                logger.warning(f"Found {mask.sum()} rows with invalid TotalCharges. Imputing...")
+                # Only impute if we have the necessary columns
+                if 'MonthlyCharges' in df.columns and 'tenure' in df.columns:
+                    df.loc[mask, 'TotalCharges'] = df.loc[mask, 'MonthlyCharges'] * df.loc[mask, 'tenure']
+                    # If tenure is 0, just use MonthlyCharges
+                    df.loc[mask & (df['tenure'] == 0), 'TotalCharges'] = df.loc[mask & (df['tenure'] == 0), 'MonthlyCharges']
+        else:
+            # If TotalCharges doesn't exist, create it from MonthlyCharges * tenure
+            if 'MonthlyCharges' in df.columns and 'tenure' in df.columns:
+                logger.warning("TotalCharges column missing. Creating from MonthlyCharges * tenure")
+                df['TotalCharges'] = df['MonthlyCharges'] * df['tenure']
+                df.loc[df['tenure'] == 0, 'TotalCharges'] = df['MonthlyCharges']
+            else:
+                logger.error("Cannot create TotalCharges - missing required columns")
+                df['TotalCharges'] = 0  # Default value
         
         return df
 
