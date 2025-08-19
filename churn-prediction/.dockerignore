@@ -1,0 +1,20 @@
+# Python-specific files to ignore
+__pycache__/
+*.pyc
+*.log
+.pytest_cache/
+.vscode/
+
+# Ignore project-specific directories that are not needed at runtime
+data/
+notebooks/
+tests/
+logs/
+mlruns/
+docs/
+
+# Ignore project metadata and configuration files not needed in the image
+.env
+.git/
+.gitignore
+.DS_Store
