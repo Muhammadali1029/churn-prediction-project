@@ -1,19 +1,33 @@
-# Python-specific files to ignore
+# Ignore a local virtual environment
+# This prevents it from being copied into the container
+/venv
+/env
+/conda_env/
+
+# Ignore common build/cache directories and files
 __pycache__/
 *.pyc
-*.log
 .pytest_cache/
 .vscode/
 
-# Ignore project-specific directories that are not needed at runtime
-data/
-notebooks/
-logs/
-mlruns/
-docs/
-
-# Ignore project metadata and configuration files not needed in the image
-.env
-.git/
-.gitignore
+# Ignore development logs and artifacts
+*.log
+*.sqlite3
 .DS_Store
+
+# Ignore large data files that are not needed in the final image
+# This is a common source of large image sizes.
+*.csv
+*.json
+*.parquet
+*.zip
+data/
+raw-data/
+
+# Ignore git artifacts
+.git
+.gitignore
+.gitattributes
+
+# Ignore a local dashboard build directory
+/dist/
