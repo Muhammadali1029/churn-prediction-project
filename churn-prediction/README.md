@@ -20,6 +20,7 @@ This project implements an end-to-end machine learning pipeline for predicting c
 
 ## 🏗️ Architecture
 ```mermaid
+%%{init: {'theme': 'dark'}}%%
 graph TD
     subgraph Training Pipeline
         A[Data Source] --> B[Feature Pipeline]
@@ -30,28 +31,23 @@ graph TD
     subgraph Serving Pipeline
         E[API Request] --> F[Flask API]
         F --> G[Model Registry]
+        G -- "Pulls model" --> F
     end
     
     subgraph Operational Flow
-    	D -- "Pushes new model" --> G
-    	G -- "Pulls model" --> F
-    	F -- "Sends data" --> I(Monitoring)
-    	A -- "Monitors for drift" --> I
-    end
-
-    subgraph Operational Flow
+        D -- "Pushes new model" --> G
+        A -- "Monitors for drift" --> I(Monitoring)
+        F -- "Sends data" --> I
         F -- "Prediction" --> J[User Application]
     end
 
-    style A fill:#e6f3ff,stroke:#66a3ff,stroke-width:2px,rx:5px,ry:5px
-    style B fill:#e6f3ff,stroke:#66a3ff,stroke-width:2px,rx:5px,ry:5px
-    style C fill:#e6f3ff,stroke:#66a3ff,stroke-width:2px,rx:5px,ry:5px
-    style D fill:#e6f3ff,stroke:#66a3ff,stroke-width:2px,rx:5px,ry:5px
-    style E fill:#fff3e6,stroke:#ff9933,stroke-width:2px,rx:5px,ry:5px
-    style F fill:#fff3e6,stroke:#ff9933,stroke-width:2px,rx:5px,ry:5px
-    style G fill:#fff3e6,stroke:#ff9933,stroke-width:2px,rx:5px,ry:5px
-    style I fill:#f0fff0,stroke:#66cc66,stroke-width:2px,rx:5px,ry:5px
-    style J fill:#d6f5d6,stroke:#339933,stroke-width:2px,rx:5px,ry:5px
+    classDef training fill:#4a4e69,stroke:#9a8c98,stroke-width:2px,rx:5px,ry:5px,color:#f2e9e4;
+    classDef serving fill:#22223b,stroke:#8f8f9c,stroke-width:2px,rx:5px,ry:5px,color:#f2e9e4;
+    classDef operational fill:#6a6a8c,stroke:#a6a6a6,stroke-width:2px,rx:5px,ry:5px,color:#f2e9e4;
+
+    class A,B,C,D training;
+    class E,F,G serving;
+    class I,J operational;
 ```
 
 ## 🚀 Quick Start
